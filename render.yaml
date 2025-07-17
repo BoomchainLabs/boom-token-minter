@@ -3,11 +3,10 @@ services:
     name: anchor-deployer
     env: docker
     plan: free
-    repo: BoomchainLabs/boom-token-minter
+    repo: https://github.com/BoomchainLabs/boom-token-minter
     branch: main
     dockerfilePath: ./Dockerfile
-    buildCommand: ""
-    startCommand: ./deploy.sh
+    autoDeploy: false
     envVars:
       - key: SOLANA_RPC
         value: https://necessary-warmhearted-water.solana-mainnet.quiknode.pro/f6dc40df50b9889088298d791735269589007907
