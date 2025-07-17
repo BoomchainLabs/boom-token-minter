@@ -1,0 +1,12 @@
+[programs.localnet]
+boom_token_minter = "ReplaceThisWithYourProgramID"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "https://necessary-warmhearted-water.solana-mainnet.quiknode.pro/f6dc40df50b9889088298d791735269589007907"
+wallet = "target/deploy/boom_token_minter-keypair.json"
+
+[scripts]
+test = "anchor test"
