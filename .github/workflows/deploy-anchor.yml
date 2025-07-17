@@ -1,0 +1,49 @@
+name: Deploy Anchor Program
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  CUSTOM_SOLANA_RPC: https://necessary-warmhearted-water.solana-mainnet.quiknode.pro/f6dc40df50b9889088298d791735269589007907
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.18.14/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Generate Program Keypair
+        run: |
+          mkdir -p target/deploy
+          solana-keygen new --outfile target/deploy/boom_token_minter-keypair.json --no-bip39-passphrase --force
+
+      - name: Configure Solana CLI
+        run: solana config set --url $CUSTOM_SOLANA_RPC
+
+      - name: Build Anchor Program
+        run: anchor build
+
+      - name: Deploy Anchor Program
+        run: anchor deploy
