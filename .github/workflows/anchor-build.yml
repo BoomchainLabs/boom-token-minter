@@ -1,0 +1,41 @@
+name: Anchor Build & Export
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: 🛠️ Install Rust + Solana + Anchor
+      run: |
+        sudo apt update
+        sudo apt install -y pkg-config build-essential libssl-dev libudev-dev curl
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        source $HOME/.cargo/env
+        rustup install stable
+        rustup default stable
+        cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+        sh -c "$(curl -sSfL https://release.solana.com/v1.18.14/install)"
+        echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+    - name: 🔨 Anchor Build
+      run: |
+        source "$HOME/.cargo/env"
+        anchor build
+
+    - name: 📤 Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: anchor-artifacts
+        path: |
+          target/deploy/*.so
+          target/idl/*.json
