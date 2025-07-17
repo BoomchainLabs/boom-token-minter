@@ -1,0 +1,14 @@
+[package]
+name = "boom-token-minter"
+version = "0.1.0"
+edition = "2021"
+authors = ["BoomchainLabs <support@boomchainlab.com>"]
+
+[dependencies]
+anchor-client = "0.29.0"
+solana-sdk = "1.18.12"
+solana-client = "1.18.12"
+clap = { version = "4.5", features = ["derive"] }
+anyhow = "1.0"
+dotenv = "0.15"
+tokio = { version = "1", features = ["full"] }
