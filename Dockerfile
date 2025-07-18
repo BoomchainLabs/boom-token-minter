@@ -1,5 +1,5 @@
 # Use official Debian-based Node image (Alpine causes musl build issues with Anchor)
-FROM node:18-bullseye
+FROM node:22-bullseye
 
 # Install OS dependencies
 RUN apt-get update && apt-get install -y \
